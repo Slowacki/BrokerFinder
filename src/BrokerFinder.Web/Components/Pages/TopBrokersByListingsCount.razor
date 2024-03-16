@@ -1,0 +1,49 @@
+﻿@page "/top-brokers"
+@using BrokerFinder.Core.Models
+@using BrokerFinder.Core.Services.Contracts
+
+@attribute [StreamRendering]
+
+@inject IBrokersService BrokersService
+
+<PageTitle>Top Brokers By Listings Count</PageTitle>
+
+<h1>Most Popular Brokers</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Number of Listings</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (_brokers == null)
+    {
+        <tr>
+            <p>Loading...</p>
+        </tr>
+    }
+    else
+    {
+        @foreach (var broker in _brokers)
+        {
+            <tr>
+                <td>@broker.Id</td>
+                <td>@broker.Name</td>
+                <td>@broker.NumberOfListings</td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+@code {
+    private IEnumerable<Broker>? _brokers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _brokers = await BrokersService.GetTopByListingsCountAsync("Amsterdam", ListingType.Buy, ListingProperties.None);
+    }
+}

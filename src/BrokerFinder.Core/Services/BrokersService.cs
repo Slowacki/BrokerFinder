@@ -12,12 +12,7 @@ public class BrokersService(IListingsStore listingsStore) : IBrokersService
         var brokers = listings
             .Where(l => l.BrokerId is not null)
             .GroupBy(l => l.BrokerId)
-            .Select(g => new Broker
-            {
-                Id = g.Key!.Value,
-                Name = g.First().BrokerName!,
-                NumberOfListings = g.Count()
-            })
+            .Select(g => new Broker(g.Key!.Value, g.First().BrokerName!, g.Count()))
             .OrderByDescending(b => b.NumberOfListings)
             .Take(limit);
 

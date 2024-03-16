@@ -31,11 +31,6 @@ public class FundaListingsStore(IListingsApi listingsApi) : IListingsStore
 
     private Listing MapToListing(FundaListing listing)
     {
-        return new Listing
-        {
-            BrokerId = listing.BrokerId,
-            BrokerName = listing.BrokerName,
-            Id = listing.Id
-        };
+        return new Listing(listing.Id, listing.BrokerId, listing.BrokerName);
     }
 }

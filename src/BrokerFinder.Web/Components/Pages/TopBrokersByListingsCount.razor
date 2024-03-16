@@ -1,6 +1,8 @@
 ﻿@page "/top-brokers"
+
 @using BrokerFinder.Core.Models
 @using BrokerFinder.Core.Services.Contracts
+@using System.ComponentModel.DataAnnotations
 
 @attribute [StreamRendering]
 
@@ -9,6 +11,41 @@
 <PageTitle>Top Brokers By Listings Count</PageTitle>
 
 <h1>Most Popular Brokers</h1>
+
+<EditForm EditContext="_editContext" OnValidSubmit="Search" FormName="top-brokers-form">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label>
+            Location:
+            <InputText @bind-Value="Form!.Location"/>
+        </label>
+    </div>
+    <div>
+        <label>
+            Listing type:
+            <InputRadioGroup @bind-Value="Form.ListingType">
+                <InputRadio Value="ListingType.Buy" /> Buy
+                <InputRadio Value="ListingType.Rent" /> Rent
+            </InputRadioGroup>
+        </label>
+    </div>
+    <div>
+        <label>
+            Listing properties:
+            <InputRadioGroup @bind-Value="Form.ListingProperties">
+                <InputRadio Value="ListingProperties.None" /> None
+                <InputRadio Value="ListingProperties.HasGarden" /> Has Garden
+            </InputRadioGroup>
+        </label>
+    </div>
+    
+    <div>
+        <button type="submit">Search</button>
+    </div>
+</EditForm>
+
+<br>
 
 <table class="table">
     <thead>
@@ -19,13 +56,7 @@
     </tr>
     </thead>
     <tbody>
-    @if (_brokers == null)
-    {
-        <tr>
-            <p>Loading...</p>
-        </tr>
-    }
-    else
+    @if (_brokers != null)
     {
         @foreach (var broker in _brokers)
         {
@@ -40,10 +71,33 @@
 </table>
 
 @code {
+    private EditContext? _editContext;
     private IEnumerable<Broker>? _brokers;
 
-    protected override async Task OnInitializedAsync()
+    [SupplyParameterFromForm]
+    public TopBrokersForm? Form { get; set; }
+    
+    protected override void OnInitialized()
     {
-        _brokers = await BrokersService.GetTopByListingsCountAsync("Amsterdam", ListingType.Buy, ListingProperties.None);
+        Form ??= new();
+        _editContext = new(Form);
+    }
+
+    private async Task Search()
+    {
+        if (string.IsNullOrWhiteSpace(Form?.Location))
+            return;
+
+        _brokers = await BrokersService.GetTopByListingsCountAsync(Form.Location!, Form.ListingType!.Value, Form.ListingProperties!.Value);
+    }
+    
+    public class TopBrokersForm
+    {
+        [Required]
+        public string? Location { get; set; }
+
+        public ListingProperties? ListingProperties { get; set; } = Core.Models.ListingProperties.None;
+        
+        public ListingType? ListingType { get; set; } = Core.Models.ListingType.Buy;
     }
 }

@@ -15,11 +15,6 @@ public class FundaListingsStore(IListingsApi listingsApi) : IListingsStore
         {
             query += "/tuin";
         }
-        
-        if (properties.HasFlag(ListingProperties.HasBalcony))
-        {
-            query += "/balkon";
-        }
 
         var listingType = type == ListingType.Buy ? "koop" : "huur";
         var fundaListingsResponse = await listingsApi.GetListingsAsync(listingType, query, 1);

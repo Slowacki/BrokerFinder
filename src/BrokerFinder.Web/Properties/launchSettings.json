@@ -5,7 +5,7 @@
       "commandName": "Project",
       "applicationUrl": "http://localhost:5000",
       "launchBrowser": true,
-      "launchUrl": "top-brokers",
+      "launchUrl": "",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -19,8 +19,6 @@ public static class ServiceCollectionExtensions
         var options = new FundaOptions();
         optionsAction(options);
 
-        services.AddTransient<IListingsStore, FundaListingsStore>();
-        
         var serializerSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()

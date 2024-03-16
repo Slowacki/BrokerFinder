@@ -7,8 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BrokerFinder.Cache\BrokerFinder.Cache.csproj" />
       <ProjectReference Include="..\BrokerFinder.Core\BrokerFinder.Core.csproj" />
       <ProjectReference Include="..\BrokerFinder.Funda\BrokerFinder.Funda.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Scrutor" Version="4.2.2" />
     </ItemGroup>
 
 </Project>

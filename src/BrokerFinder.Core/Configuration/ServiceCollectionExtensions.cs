@@ -8,7 +8,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddCore(this IServiceCollection services)
     {
-        services.AddTransient<IBrokersService, BrokersService>();
+        services.AddScoped<IBrokersService, BrokersService>();
         
         return services;
     }

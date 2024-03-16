@@ -1,5 +1,10 @@
+using BrokerFinder.Cache.Configuration;
+using BrokerFinder.Cache.Services;
 using BrokerFinder.Core.Configuration;
+using BrokerFinder.Core.Services;
+using BrokerFinder.Core.Services.Contracts;
 using BrokerFinder.Funda.Configuration;
+using BrokerFinder.Funda.Services;
 using BrokerFinder.Web.Components;
 
 namespace BrokerFinder.Web;
@@ -17,6 +22,10 @@ public class Program
 
         services.AddCore();
         services.AddFunda(options => builder.Configuration.Bind("Funda", options));
+        services.AddCache(options => builder.Configuration.Bind("Redis", options));
+        
+        services.AddScoped<IListingsStore, FundaListingsStore>();
+        services.Decorate<IListingsStore, CachedListingsStore>();
         
         var app = builder.Build();
 

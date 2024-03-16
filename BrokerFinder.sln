@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrokerFinder.Core", "src\Br
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrokerFinder.Web", "src\BrokerFinder.Web\BrokerFinder.Web.csproj", "{58656DF9-0476-400E-990B-4DE5EBD88A6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrokerFinder.Cache", "src\BrokerFinder.Cache\BrokerFinder.Cache.csproj", "{802F3F69-BF2E-490D-A924-50E28CE0C639}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,10 +30,15 @@ Global
 		{58656DF9-0476-400E-990B-4DE5EBD88A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58656DF9-0476-400E-990B-4DE5EBD88A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58656DF9-0476-400E-990B-4DE5EBD88A6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{802F3F69-BF2E-490D-A924-50E28CE0C639}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{802F3F69-BF2E-490D-A924-50E28CE0C639}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{802F3F69-BF2E-490D-A924-50E28CE0C639}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{802F3F69-BF2E-490D-A924-50E28CE0C639}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CEF44295-A022-4469-8A52-F09F04961007} = {ED407DB1-76EF-4867-AD47-444394D9EA04}
 		{E4A6A0A4-EF92-43AB-8233-E3C07BB28084} = {ED407DB1-76EF-4867-AD47-444394D9EA04}
 		{58656DF9-0476-400E-990B-4DE5EBD88A6F} = {ED407DB1-76EF-4867-AD47-444394D9EA04}
+		{802F3F69-BF2E-490D-A924-50E28CE0C639} = {ED407DB1-76EF-4867-AD47-444394D9EA04}
 	EndGlobalSection
 EndGlobal

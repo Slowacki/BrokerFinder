@@ -1,7 +1,5 @@
 ﻿using System.Net;
-using BrokerFinder.Core.Services.Contracts;
 using BrokerFinder.Funda.Apis;
-using BrokerFinder.Funda.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -26,7 +24,6 @@ public static class ServiceCollectionExtensions
 
         var refitSettings = new RefitSettings { ContentSerializer = new NewtonsoftJsonContentSerializer(serializerSettings) };
 
-        // var rateLimitPolicy = Policy.RateLimitAsync<HttpResponseMessage>(100, TimeSpan.FromMinutes(1), 50);
         
         var retryPolicy = HttpPolicyExtensions
             .HandleTransientHttpError()
@@ -38,7 +35,6 @@ public static class ServiceCollectionExtensions
         services
             .AddRefitClient<IListingsApi>(refitSettings)
             .ConfigureHttpClient((sp, c) => c.BaseAddress = new Uri(options.Url, options.Key))
-            // .AddPolicyHandler(rateLimitPolicy)
             .AddPolicyHandler(retryPolicy);
         
         return services;

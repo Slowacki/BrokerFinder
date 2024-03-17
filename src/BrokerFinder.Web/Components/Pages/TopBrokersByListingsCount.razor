@@ -56,6 +56,12 @@
     </tr>
     </thead>
     <tbody>
+    @if (_isLoading)
+    {
+        <tr>
+            <td colspan="3">Loading</td>
+        </tr>
+    }
     @if (_brokers != null)
     {
         @foreach (var broker in _brokers)
@@ -73,6 +79,7 @@
 @code {
     private EditContext? _editContext;
     private IEnumerable<Broker>? _brokers;
+    private bool _isLoading;
 
     [SupplyParameterFromForm]
     public TopBrokersForm? Form { get; set; }
@@ -88,7 +95,11 @@
         if (string.IsNullOrWhiteSpace(Form?.Location))
             return;
 
+        _isLoading = true;
+        
         _brokers = await BrokersService.GetTopByListingsCountAsync(Form.Location!, Form.ListingType!.Value, Form.ListingProperties!.Value);
+
+        _isLoading = false;
     }
     
     public class TopBrokersForm

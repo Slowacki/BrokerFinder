@@ -6,10 +6,26 @@ services:
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes
-    ports:
-      - '6379:6379'
+    # ports:
+    #   - '6379:6379'
     volumes:
       - 'redis_data:/bitnami/redis/data'
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 2s
+      retries: 10
+
+  broker_finder:
+    depends_on:
+      redis:
+        condition: service_healthy
+
+    image: broker_finder:latest
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
 
 volumes:
   redis_data:

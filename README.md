@@ -8,9 +8,6 @@
 ## How to run
 - Clone the solution from github
 - Make sure ports 5000 and 6379 are available
+- Run `docker build -t broker_finder .`
 - Run `docker compose up` in the main solution folder
-- Navigate to `../BrokerFinder/src/BrokerFinder.Web`
-- Run `dotnet run -c development` 
-- Alternatively open the `.sln` file in the chosen IDE (e.g. Rider, VS) and run there
 - Navigate to `https://localhost:5000/top-brokers`
-

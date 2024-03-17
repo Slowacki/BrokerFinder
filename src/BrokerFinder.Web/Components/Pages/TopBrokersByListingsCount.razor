@@ -12,7 +12,7 @@
 
 <h1>Most Popular Brokers</h1>
 
-<EditForm EditContext="_editContext" OnValidSubmit="Search" FormName="top-brokers-form">
+<EditForm EditContext="_editContext" OnValidSubmit="SearchAsync" FormName="top-brokers-form">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div>
@@ -83,7 +83,7 @@
         _editContext = new(Form);
     }
 
-    private async Task Search()
+    private async Task SearchAsync()
     {
         if (string.IsNullOrWhiteSpace(Form?.Location))
             return;

@@ -7,7 +7,7 @@ namespace BrokerFinder.Funda.Services;
 
 public class FundaListingsStore(IListingsApi listingsApi) : IListingsStore
 {
-    public async Task<IEnumerable<Listing>> GetAsync(string location, ListingType type, ListingProperties properties)
+    public async Task<IEnumerable<Listing>> GetAsync(string location, ListingType type, ListingProperties properties, CancellationToken cancellationToken = default)
     {
         var query = $"/{location}";
 

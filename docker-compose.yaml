@@ -6,8 +6,8 @@ services:
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes
-    # ports:
-    #   - '6379:6379'
+    ports:
+      - '6379:6379'
     volumes:
       - 'redis_data:/bitnami/redis/data'
     healthcheck:
@@ -15,17 +15,20 @@ services:
       interval: 1s
       timeout: 2s
       retries: 10
+    profiles: ["debug", "run"]
 
   broker_finder:
     depends_on:
       redis:
         condition: service_healthy
-
-    image: broker_finder:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "5000:8080"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Release
+      - ASPNETCORE_ENVIRONMENT=Production
+    profiles: ["run"]
 
 volumes:
   redis_data:

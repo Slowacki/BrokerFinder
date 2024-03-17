@@ -8,6 +8,11 @@
 ## How to run
 - Clone the solution from github
 - Make sure ports 5000 and 6379 are available
-- Run `docker build -t broker_finder .`
-- Run `docker compose up` in the main solution folder
+- Run `docker compose --profile run up` in the main solution folder
+- Navigate to `https://localhost:5000/top-brokers`
+
+## How to debug
+- Clone the solution from github
+- Make sure ports 5000 and 6379 are available
+- Run `docker compose --profile debug up` in the main solution folder
 - Navigate to `https://localhost:5000/top-brokers`

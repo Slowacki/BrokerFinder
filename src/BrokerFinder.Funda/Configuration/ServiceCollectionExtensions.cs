@@ -1,10 +1,11 @@
-﻿using System.Net;
+﻿using System.Threading.RateLimiting;
 using BrokerFinder.Funda.Apis;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Polly;
-using Polly.Extensions.Http;
+using Polly.RateLimiting;
+using Polly.Retry;
 using Refit;
 
 namespace BrokerFinder.Funda.Configuration;
@@ -21,21 +22,33 @@ public static class ServiceCollectionExtensions
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
-
+        
         var refitSettings = new RefitSettings { ContentSerializer = new NewtonsoftJsonContentSerializer(serializerSettings) };
 
-        
-        var retryPolicy = HttpPolicyExtensions
-            .HandleTransientHttpError()
-            // The API returns 401 when the rate limit is reached instead of the usual 429
-            .OrResult(m => m.StatusCode == HttpStatusCode.Unauthorized)
-            //.OrResult(m => m.StatusCode == HttpStatusCode.TooManyRequests)
-            .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
-        
         services
             .AddRefitClient<IListingsApi>(refitSettings)
             .ConfigureHttpClient((sp, c) => c.BaseAddress = new Uri(options.Url, options.Key))
-            .AddPolicyHandler(retryPolicy);
+            .AddResilienceHandler("RateLimitingPolicy", builder =>
+            {
+                builder.AddRetry(
+                    new RetryStrategyOptions<HttpResponseMessage>
+                    {
+                        ShouldHandle = new PredicateBuilder<HttpResponseMessage>()
+                            .Handle<RateLimiterRejectedException>(),
+                        Delay = TimeSpan.FromSeconds(1),
+                        MaxRetryAttempts = 6,
+                        UseJitter = false,
+                        BackoffType = DelayBackoffType.Exponential
+                    })
+                    .AddRateLimiter(new SlidingWindowRateLimiter(
+                    new SlidingWindowRateLimiterOptions
+                    {
+                        PermitLimit = options.ApiRateLimit,
+                        Window = options.ApiRateLimitWindow,
+                        AutoReplenishment = true,
+                        SegmentsPerWindow = 3
+                    }));
+            });
         
         return services;
     }

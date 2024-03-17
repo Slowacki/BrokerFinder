@@ -9,4 +9,10 @@ public class FundaOptions
     
     [Required]
     public string Key { get; set; } = default!;
+    
+    [Required]
+    public int ApiRateLimit { get; set; } = default!;
+    
+    [Required]
+    public TimeSpan ApiRateLimitWindow { get; set; } = default!;
 }

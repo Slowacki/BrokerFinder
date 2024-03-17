@@ -7,6 +7,8 @@ namespace BrokerFinder.Cache.Services;
 
 public class CachedListingsStore(IListingsStore listingsStore, IDistributedCache cache) : IListingsStore
 {
+    private readonly TimeSpan _cacheEntryLifespan = TimeSpan.FromMinutes(15);
+    
     public async Task<IEnumerable<Listing>> GetAsync(string location, ListingType type, ListingProperties properties, CancellationToken cancellationToken = default)
     {
         var key = GenerateKey(location, type, properties);
@@ -23,7 +25,7 @@ public class CachedListingsStore(IListingsStore listingsStore, IDistributedCache
             SerializationHelper.Serialize(data),
             new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15)
+                AbsoluteExpirationRelativeToNow = _cacheEntryLifespan
             },
             cancellationToken);
 

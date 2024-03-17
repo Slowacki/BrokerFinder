@@ -9,5 +9,6 @@ public interface IListingsApi
     Task<GetListingsResponse> GetListingsAsync([Query] string type,
         [Query][AliasAs("zo")] string query,
         [Query] int page,
-        [Query] int pageSize = 25);
+        [Query] int pageSize = 25,
+        CancellationToken cancellationToken = default);
 }

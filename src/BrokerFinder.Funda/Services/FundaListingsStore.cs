@@ -17,12 +17,12 @@ public class FundaListingsStore(IListingsApi listingsApi) : IListingsStore
         }
 
         var listingType = type == ListingType.Buy ? "koop" : "huur";
-        var fundaListingsResponse = await listingsApi.GetListingsAsync(listingType, query, 1);
+        var fundaListingsResponse = await listingsApi.GetListingsAsync(listingType, query, 1, cancellationToken: cancellationToken);
         var fundaListings = fundaListingsResponse.Results.ToList();
         
         while (fundaListingsResponse.Pagination.CurrentPage < fundaListingsResponse.Pagination.PagesCount)
         {
-            fundaListingsResponse = await listingsApi.GetListingsAsync(listingType, query, fundaListingsResponse.Pagination.CurrentPage + 1);
+            fundaListingsResponse = await listingsApi.GetListingsAsync(listingType, query, fundaListingsResponse.Pagination.CurrentPage + 1, cancellationToken: cancellationToken);
             fundaListings.AddRange(fundaListingsResponse.Results);
         }
 

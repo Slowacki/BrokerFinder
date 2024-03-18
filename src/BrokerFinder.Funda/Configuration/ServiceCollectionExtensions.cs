@@ -1,4 +1,5 @@
-﻿using System.Threading.RateLimiting;
+﻿using System.Net;
+using System.Threading.RateLimiting;
 using BrokerFinder.Funda.Apis;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -34,6 +35,9 @@ public static class ServiceCollectionExtensions
                     new RetryStrategyOptions<HttpResponseMessage>
                     {
                         ShouldHandle = new PredicateBuilder<HttpResponseMessage>()
+                            // Handle transient errors and 401 in case we do hit the API's rate limiter
+                            .HandleResult(response => (int)response.StatusCode >= 500 || response.StatusCode == HttpStatusCode.Unauthorized)
+                            // Handle exceptions throw by our own rate limiter
                             .Handle<RateLimiterRejectedException>(),
                         Delay = TimeSpan.FromSeconds(1),
                         MaxRetryAttempts = 6,
